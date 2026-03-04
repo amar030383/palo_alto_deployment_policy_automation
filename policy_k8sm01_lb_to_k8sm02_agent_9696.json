@@ -1,0 +1,13 @@
+{
+  "rule_name": "k8sm01-lb-to-k8sm02-agent-9696",
+  "description": "Allow k8sm01 LB subnet to k8sm02 agent subnet on tcp/9696",
+  "source": "172.18.2.0/24",
+  "destination": "172.18.7.0/24",
+  "destination_ports": "996",
+  "protocol": "tcp",
+  "action": "allow",
+  "application": "any",
+  "log_start": true,
+  "log_end": false,
+  "validate_existing_subnets": true
+}

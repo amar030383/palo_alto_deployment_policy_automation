@@ -1,0 +1,14 @@
+{
+  "rule_name": "allow-web-to-db",
+  "description": "Allow web servers to reach database on port 5432",
+  "source": "192.168.10.0/24",
+  "destination": "192.168.20.10",
+  "destination_ports": "5432",
+  "protocol": "tcp",
+  "action": "allow",
+  "source_zone": "trust",
+  "destination_zone": "dmz",
+  "application": "any",
+  "log_start": true,
+  "log_end": false
+}

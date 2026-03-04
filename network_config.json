@@ -1,0 +1,169 @@
+{
+  "zones": [
+    "trust",
+    "dmz",
+    "embedded",
+    "printer",
+    "cameras",
+    "voip",
+    "internal-tools",
+    "k8sm01",
+    "k8sm02",
+    "untrust"
+  ],
+  "vlans": [
+    {
+      "subnet": "192.168.10.0/24",
+      "vlan_id": 10,
+      "zone": "trust",
+      "gateway": "192.168.10.1"
+    },
+    {
+      "subnet": "192.168.20.0/24",
+      "vlan_id": 20,
+      "zone": "dmz",
+      "gateway": "192.168.20.1"
+    },
+    {
+      "subnet": "172.18.70.0/24",
+      "vlan_id": 970,
+      "zone": "embedded",
+      "gateway": "172.18.70.1"
+    },
+    {
+      "subnet": "172.18.71.0/24",
+      "vlan_id": 971,
+      "zone": "printer",
+      "gateway": "172.18.71.1"
+    },
+    {
+      "subnet": "172.18.72.0/24",
+      "vlan_id": 972,
+      "zone": "cameras",
+      "gateway": "172.18.72.1"
+    },
+    {
+      "subnet": "172.18.73.0/24",
+      "vlan_id": 973,
+      "zone": "voip",
+      "gateway": "172.18.73.1"
+    },
+    {
+      "subnet": "172.18.74.0/24",
+      "vlan_id": 974,
+      "zone": "internal-tools",
+      "gateway": "172.18.74.1"
+    },
+    {
+      "subnet": "172.18.4.0/24",
+      "vlan_id": 801,
+      "zone": "k8sm01",
+      "gateway": "172.18.4.1"
+    },
+    {
+      "subnet": "172.18.2.0/24",
+      "vlan_id": 802,
+      "zone": "k8sm01",
+      "gateway": "172.18.2.1"
+    },
+    {
+      "subnet": "172.18.5.0/24",
+      "vlan_id": 803,
+      "zone": "k8sm01",
+      "gateway": "172.18.5.1"
+    },
+    {
+      "subnet": "172.18.6.0/24",
+      "vlan_id": 804,
+      "zone": "k8sm02",
+      "gateway": "172.18.6.1"
+    },
+    {
+      "subnet": "172.18.7.0/24",
+      "vlan_id": 805,
+      "zone": "k8sm02",
+      "gateway": "172.18.7.1"
+    },
+    {
+      "subnet": "172.18.8.0/24",
+      "vlan_id": 806,
+      "zone": "k8sm02",
+      "gateway": "172.18.8.1"
+    }
+  ],
+  "policies": [
+    {
+      "name": "vlan10-trust-to-vlan20-dmz-db",
+      "source_zone": "trust",
+      "destination_zone": "dmz",
+      "source": ["192.168.10.0/24"],
+      "destination": ["192.168.20.10"],
+      "service": ["tcp/5432"],
+      "description": "Allow VLAN 10 to VLAN 20 database access"
+    },
+    {
+      "name": "k8ms01-cp-to-agents",
+      "source_zone": "k8sm01",
+      "destination_zone": "k8sm01",
+      "source": ["any"],
+      "destination": ["any"],
+      "service": ["tcp/6443", "tcp/2379-2380", "tcp/10257", "tcp/10259"],
+      "description": "K8s MS01 control plane to agents"
+    },
+    {
+      "name": "k8ms01-lb-to-agents",
+      "source_zone": "k8sm01",
+      "destination_zone": "k8sm01",
+      "source": ["any"],
+      "destination": ["any"],
+      "service": ["tcp/443", "tcp/5000"],
+      "description": "K8s MS01 LB to agents"
+    },
+    {
+      "name": "k8ms01-lb-to-ms02-agents",
+      "source_zone": "k8sm01",
+      "destination_zone": "k8sm02",
+      "source": ["any"],
+      "destination": ["any"],
+      "service": ["tcp/443", "tcp/5000"],
+      "description": "K8s MS01 LB to MS02 agents"
+    },
+    {
+      "name": "k8ms02-cp-to-agents",
+      "source_zone": "k8sm02",
+      "destination_zone": "k8sm02",
+      "source": ["any"],
+      "destination": ["any"],
+      "service": ["tcp/6443", "tcp/2379-2380", "tcp/10257", "tcp/10259"],
+      "description": "K8s MS02 control plane to agents"
+    },
+    {
+      "name": "k8ms02-lb-to-agents",
+      "source_zone": "k8sm02",
+      "destination_zone": "k8sm02",
+      "source": ["any"],
+      "destination": ["any"],
+      "service": ["tcp/443", "tcp/5000"],
+      "description": "K8s MS02 LB to agents"
+    }
+  ],
+  "nat": {
+    "enabled": true,
+    "outgoing_rule": {
+      "name": "outgoing-source-nat",
+      "from_zones": ["trust", "dmz", "embedded", "printer", "cameras", "voip", "internal-tools", "k8sm01", "k8sm02"],
+      "to_zone": "untrust",
+      "source_translation_type": "dynamic-ip-and-port",
+      "source_translation_interface": "ethernet1/2",
+      "description": "NAT for outgoing internet traffic"
+    }
+  },
+  "interface_settings": {
+    "vlan_trunk_interface": "ethernet1/1",
+    "untrust_interface": "ethernet1/2"
+  },
+  "host_objects": {
+    "name_prefix": "h_obj",
+    "host_suffixes": [10, 99]
+  }
+}
