@@ -9,6 +9,7 @@
   "source_zone": "trust",
   "destination_zone": "dmz",
   "application": "any",
+  "validate_existing_subnets": false,
   "log_start": true,
   "log_end": false
 }

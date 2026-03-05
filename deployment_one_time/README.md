@@ -1,6 +1,6 @@
 # Palo Alto Setup Automation
 
-This README is specifically for `palo_alto_setup.py` (fresh firewall setup).
+This README is specifically for `deployment_one_time/palo_alto_setup.py` (fresh firewall setup).
 
 ## Current Status
 
@@ -93,7 +93,7 @@ export PA_PASSWORD="your-password"
 
 ## Config File
 
-Use `network_config.json` for:
+Use `deployment_one_time/network_config.json` for:
 
 - zones
 - VLANs/subnets
@@ -106,45 +106,45 @@ Use `network_config.json` for:
 
 ```bash
 # all modules
-python3.11 palo_alto_setup.py --config network_config.json --all
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --all
 
 # specific modules
-python3.11 palo_alto_setup.py --config network_config.json --zones
-python3.11 palo_alto_setup.py --config network_config.json --interfaces
-python3.11 palo_alto_setup.py --config network_config.json --nat
-python3.11 palo_alto_setup.py --config network_config.json --policies
-python3.11 palo_alto_setup.py --config network_config.json --untrust
-python3.11 palo_alto_setup.py --config network_config.json --objects
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --zones
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --interfaces
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --nat
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --policies
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --untrust
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --objects
 ```
 
 ## Day-2 Operations (Safe Updates)
 
 - **Only VLAN/Zone changes**:
-  - `python3.11 palo_alto_setup.py --config network_config.json --zones --interfaces`
+  - `python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --zones --interfaces`
 - **Only NAT changes**:
-  - `python3.11 palo_alto_setup.py --config network_config.json --nat`
+  - `python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --nat`
 - **Only policy changes**:
-  - `python3.11 palo_alto_setup.py --config network_config.json --policies`
+  - `python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --policies`
 - **Only host objects**:
-  - `python3.11 palo_alto_setup.py --config network_config.json --objects`
+  - `python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --objects`
 
 ## Recommended Execution Order
 
 For first-time setup:
 
 ```bash
-python3.11 palo_alto_setup.py --config network_config.json --all
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --all
 ```
 
 If running in steps:
 
 ```bash
-python3.11 palo_alto_setup.py --config network_config.json --untrust
-python3.11 palo_alto_setup.py --config network_config.json --zones
-python3.11 palo_alto_setup.py --config network_config.json --interfaces
-python3.11 palo_alto_setup.py --config network_config.json --nat
-python3.11 palo_alto_setup.py --config network_config.json --policies
-python3.11 palo_alto_setup.py --config network_config.json --objects
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --untrust
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --zones
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --interfaces
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --nat
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --policies
+python3.11 deployment_one_time/palo_alto_setup.py --config deployment_one_time/network_config.json --objects
 ```
 
 ## Expected Success Indicators
@@ -176,7 +176,7 @@ You should see logs similar to:
   Use Python `3.11`; `pan-os-python` is not compatible with Python 3.14.
 
 - **NAT or policy reference errors**  
-  Re-run module-by-module and verify `network_config.json` zone/interface names match actual device config.
+  Re-run module-by-module and verify `deployment_one_time/network_config.json` zone/interface names match actual device config.
 
 - **Warnings: interface already in use / zone layer3 invalid**  
   Common during re-apply on existing config. If final commit is successful and expected mappings are present, this is usually non-fatal.
